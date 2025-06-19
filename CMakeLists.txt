@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(TinyShell main.cpp
         execute.cpp
-        tinyshell.h)
+        tinyshell.h
+        parse.cpp)
