@@ -4,11 +4,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <fcntl.h>     // For open(), O_RDONLY, etc.
-#include <unistd.h>    // For fork(), execvp(), pipe(), etc.
-
-// No need for <stdbool.h> in C++
-// bool, true, and false are built-in
+#include <fcntl.h>
+#include <unistd.h>
 
 #define ERROR -1
 #define INTERACTIVE 0
