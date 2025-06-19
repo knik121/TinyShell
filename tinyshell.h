@@ -1,41 +1,38 @@
-#ifndef TINYSHELL_H
-#define TINYSHELL_H
+#pragma once
 
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <fcntl.h>
-#include <unistd.h>
+#include <vector>
+#include <string>
 
-#define ERROR -1
-#define INTERACTIVE 0
-#define COMMANDLINE 1
 #define CHILD 0
-#define CURRENT 0
-#define PREVIOUS 1
+#define ERROR -1
 #define READ 0
 #define WRITE 1
-#define TRUNCATE 1
-#define APPEND 2
+#define CURRENT 1
+#define PREVIOUS 0
+#define INTERACTIVE 'i'
+#define COMMANDLINE 'c'
 
-#define is_same !strcmp
+using io = int[2];
 
-typedef int io[2];
-
-extern int I;
 extern int pipe_count;
+extern int I;
 extern bool is_background;
 
-bool redirect_in(char **arguments);
-bool redirect_out(char **arguments);
-void execute(char **command);
-void free_strings(char **strings);
-char ***parse(char *line);
-void exit_error(const char *message);
+// Updated to C++ signatures
+void execute(const std::vector<std::string>& command);
+std::vector<std::vector<std::string>> parse(const std::string& line);
+
 bool connect(io pipes[2]);
 void close_(io pipes[2]);
-void alternate(int **pipes);
-void erase_from(char **strings, size_t count);
-void *xmalloc(size_t size);
+void alternate(int** pipes);
 
-#endif
+bool redirect_in(std::vector<std::string>& args);
+bool redirect_out(std::vector<std::string>& args);
+
+void exit_error(const char* source);
+void setup_signals();
+
+// Still C-style (not needed in main.cpp)
+void free_strings(char** strings);
+void erase_from(std::vector<std::string>& args, size_t count);
+

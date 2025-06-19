@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "tinyshell.h"
+#include <unistd.h>
 
 using namespace std;
 
@@ -28,9 +29,8 @@ static void pull_back(char** arguments)
     while (arguments[++i]);
 }
 
-void erase_from(char** strings, size_t count)
-{
-    size_t i = 0;
-    while (*strings && i++ < count)
-        pull_back(strings);
+void erase_from(std::vector<std::string>& args, size_t count) {
+    if (count > args.size()) return;
+    args.erase(args.begin(), args.begin() + count);
 }
+
