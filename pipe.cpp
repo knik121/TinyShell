@@ -1,6 +1,5 @@
+#include <unistd.h>
 #include "tinyshell.h"
-#include <unistd.h> // For dup2(), close()
-#include <cstdio>   // For standard file descriptors (optional)
 
 #define is_last_command (I == pipe_count)
 
@@ -27,9 +26,9 @@ void close_(io pipes[2])
     }
 }
 
-void alternate(int **pipes)
+void alternate(int** pipes)
 {
-    int* pipe_current = pipes[CURRENT];
+    int* temp = pipes[CURRENT];
     pipes[CURRENT] = pipes[PREVIOUS];
-    pipes[PREVIOUS] = pipe_current;
+    pipes[PREVIOUS] = temp;
 }

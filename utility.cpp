@@ -1,14 +1,18 @@
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <string>
 #include "tinyshell.h"
-#include <cstdlib>   // For free(), _exit()
-#include <cstdio>    // For perror()
 
-void exit_error(const char *source)
+using namespace std;
+
+void exit_error(const char* source)
 {
     perror(source);
     _exit(EXIT_FAILURE);
 }
 
-void free_strings(char **strings)
+void free_strings(char** strings)
 {
     size_t i = 0;
     while (strings[i])
@@ -16,16 +20,15 @@ void free_strings(char **strings)
     free(strings);
 }
 
-static void pull_back(char **arguments)
+static void pull_back(char** arguments)
 {
     size_t i = 0;
     free(arguments[i]);
-    do
-        arguments[i] = arguments[i + 1];
+    do arguments[i] = arguments[i + 1];
     while (arguments[++i]);
 }
 
-void erase_from(char **strings, size_t count)
+void erase_from(char** strings, size_t count)
 {
     size_t i = 0;
     while (*strings && i++ < count)

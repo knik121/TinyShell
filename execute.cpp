@@ -1,17 +1,27 @@
-#include "tinyshell.h"
+#include <vector>
+#include <string>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <cstdlib>
+#include <cstring>
+#include "tinyshell.h"
 
-static bool fork_pipe_redirect(char **command, io pipes[2])
+using namespace std;
+
+static bool fork_pipe_redirect(const vector<string>& command, io pipes[2])
 {
     if (fork() == CHILD)
-        if (redirect_in(command) && connect(pipes) && redirect_out(command))
+    {
+        vector<char*> argv;
+        for (auto& s : command) argv.push_back(const_cast<char*>(s.c_str()));
+        argv.push_back(nullptr);
+
+        if (redirect_in(argv.data()) && connect(pipes) && redirect_out(argv.data()))
             return true;
+    }
     return false;
 }
 
-void execute(char **command)
+void execute(const vector<string>& command)
 {
     static io pipes[2];
     bool is_child_process;
@@ -23,7 +33,11 @@ void execute(char **command)
 
     if (is_child_process)
     {
-        execvp(command[0], command);
+        vector<char*> argv;
+        for (auto& s : command) argv.push_back(const_cast<char*>(s.c_str()));
+        argv.push_back(nullptr);
+
+        execvp(argv[0], argv.data());
         exit_error("execvp");
     }
 
@@ -31,5 +45,5 @@ void execute(char **command)
         while (wait(nullptr) >= 0);
 
     close_(pipes);
-    alternate((int **)pipes);
+    alternate(reinterpret_cast<int**>(pipes));
 }
