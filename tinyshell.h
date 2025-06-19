@@ -18,7 +18,6 @@ extern int pipe_count;
 extern int I;
 extern bool is_background;
 
-// Updated to C++ signatures
 void execute(const std::vector<std::string>& command);
 std::vector<std::vector<std::string>> parse(const std::string& line);
 
@@ -32,7 +31,6 @@ bool redirect_out(std::vector<std::string>& args);
 void exit_error(const char* source);
 void setup_signals();
 
-// Still C-style (not needed in main.cpp)
 void free_strings(char** strings);
 void erase_from(std::vector<std::string>& args, size_t count);
 
