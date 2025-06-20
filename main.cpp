@@ -58,6 +58,7 @@ static void parse_and_run(string& line)
 
 int main(int argc, char** argv)
 {
+    setup_signal_handlers();
     char mode;
     check(mode, argc, argv);
 
