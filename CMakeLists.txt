@@ -14,4 +14,4 @@ add_executable(TinyShell
         signal.cpp
         tinyshell.h
 )
-
+target_link_libraries(TinyShell readline)

@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "tinyshell.h"
 
 using namespace std;
@@ -22,11 +24,14 @@ static void run(vector<vector<string>>& commands) {
     }
 }
 
-static bool read_line(string& line, const string& prompt)
-{
-    cout << prompt;
-    if (!getline(cin, line))
+static bool read_line(std::string& line, const std::string& prompt) {
+    char* input = readline(prompt.c_str());
+    if (!input)  // Ctrl+D or EOF
         exit(EXIT_SUCCESS);
+    if (*input)  // Only add non-empty inputs to history
+        add_history(input);
+    line = std::string(input);
+    free(input);
     return true;
 }
 
