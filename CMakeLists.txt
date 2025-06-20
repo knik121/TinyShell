@@ -10,5 +10,8 @@ add_executable(TinyShell
         pipe.cpp
         redirect.cpp
         utility.cpp
+        builtin.cpp
         signal.cpp
+        tinyshell.h
 )
+

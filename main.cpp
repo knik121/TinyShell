@@ -9,12 +9,17 @@ using namespace std;
 int pipe_count;
 int I;
 bool is_background;
+static vector<string> history;
 
-static void run(vector<vector<string>>& commands)
-{
-    for (I = 0; I < commands.size(); ++I)
-        if (!commands[I].empty())
+static void run(vector<vector<string>>& commands) {
+    I = -1;
+    while (++I < commands.size()) {
+        if (!commands[I].empty()) {
+            if (handle_builtin(commands[I]))
+                continue;  // Don't execvp if built-in handled
             execute(commands[I]);
+        }
+    }
 }
 
 static bool read_line(string& line, const string& prompt)
@@ -37,6 +42,7 @@ static void check(char& mode, int argc, char** argv)
 
 static void parse_and_run(string& line)
 {
+    history.push_back(line);
     is_background = !line.empty() && line.back() == '&';
     if (is_background)
         line.pop_back();
@@ -53,8 +59,14 @@ int main(int argc, char** argv)
     if (mode == INTERACTIVE)
     {
         string line;
-        while (read_line(line, "tinyshell$ "))
+        while (true) {
+            char cwd[1024];
+            getcwd(cwd, sizeof(cwd));
+            string prompt = string("tinyshell:") + cwd + "$ ";
+            if (!read_line(line, prompt))
+                break;
             parse_and_run(line);
+        }
     }
     else
     {

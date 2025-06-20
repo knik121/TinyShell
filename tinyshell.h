@@ -34,3 +34,4 @@ void setup_signals();
 void free_strings(char** strings);
 void erase_from(std::vector<std::string>& args, size_t count);
 
+bool handle_builtin(const std::vector<std::string>& args);

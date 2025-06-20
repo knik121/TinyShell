@@ -23,8 +23,11 @@ void execute(const std::vector<std::string>& command) {
                 c_args.push_back(const_cast<char*>(arg.c_str()));
             c_args.push_back(nullptr);
 
-            execvp(c_args[0], c_args.data());
-            exit_error("execvp");
+            if (execvp(c_args[0], c_args.data()) == -1) {
+                perror(("Command not found: " + command[0]).c_str());
+                exit_error("execvp");
+            }
+
         }
     }
 
