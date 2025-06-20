@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <algorithm>
+#include <sys/wait.h>
+
 using namespace std;
 
 vector<Job> job_list;
@@ -40,12 +42,12 @@ void bring_to_background(int job_id) {
             return;
         }
     }
-    std::cerr << "bg: job not found\n";
+    cerr << "bg: job not found\n";
 }
 
 void remove_job(pid_t pgid) {
     job_list.erase(
-        std::remove_if(job_list.begin(), job_list.end(),
+        remove_if(job_list.begin(), job_list.end(),
                        [pgid](const Job& job) { return job.pgid == pgid; }),
         job_list.end());
 }

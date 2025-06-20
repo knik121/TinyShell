@@ -9,6 +9,7 @@
 
 using namespace std;
 
+pid_t fg_pgid = -1;
 void execute(const vector<string>& command) {
     static io pipes[2];
 
@@ -36,7 +37,7 @@ void execute(const vector<string>& command) {
     }
     else if (pid > 0) {
         setpgid(pid, pid);  // Set child's pgid to its pid
-
+        fg_pgid = pid;
         if (is_background) {
             add_job(pid, command[0]);  // Track background job
         } else {
@@ -45,10 +46,9 @@ void execute(const vector<string>& command) {
 
             int status;
             waitpid(pid, &status, WUNTRACED);  // WUNTRACED for Ctrl+Z
-
             // Return terminal control to shell
             tcsetpgrp(STDIN_FILENO, getpgrp());
-
+            fg_pgid = -1;
             // If the process exited (not stopped), clean up
             if (!WIFSTOPPED(status)) {
                 remove_job(pid);

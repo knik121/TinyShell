@@ -37,3 +37,5 @@ void erase_from(std::vector<std::string>& args, size_t count);
 bool handle_builtin(const std::vector<std::string>& args);
 
 void setup_signal_handlers();
+
+extern pid_t fg_pgid;
