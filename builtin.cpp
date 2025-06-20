@@ -5,11 +5,25 @@
 #include <cstdlib>
 #include <cstring>
 #include "tinyshell.h"
+#include "job.h"
 
 using namespace std;
 
 bool handle_builtin(const vector<string>& args) {
     if (args.empty()) return false;
+
+    if (args[0] == "jobs") {
+        list_jobs();
+        return true;
+    }
+    if (args[0] == "fg" && args.size() == 2) {
+        bring_to_foreground(std::stoi(args[1]));
+        return true;
+    }
+    if (args[0] == "bg" && args.size() == 2) {
+        bring_to_background(std::stoi(args[1]));
+        return true;
+    }
 
     if (args[0] == "exit") {
         exit(0);
